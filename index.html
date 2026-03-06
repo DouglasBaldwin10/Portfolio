@@ -67,14 +67,11 @@
                         <div class="profile-ring"></div>
                     </div>
                     <div class="globe-container">
-                        <div class="globe">
-                            <div class="globe-grid"></div>
-                            <div class="globe-highlight"></div>
-                            <div class="location-marker">
-                                <div class="marker-pin"></div>
-                                <div class="marker-pulse"></div>
-                                <span class="marker-label">Durban, SA</span>
-                            </div>
+                        <canvas id="globe-canvas"></canvas>
+                        <div class="location-marker">
+                            <div class="marker-pin"></div>
+                            <div class="marker-pulse"></div>
+                            <span class="marker-label">Durban, SA</span>
                         </div>
                     </div>
                 </div>
@@ -86,6 +83,102 @@
             </svg>
         </div>
     </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js Globe
+        const canvas = document.getElementById('globe-canvas');
+        const container = document.querySelector('.globe-container');
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+        camera.position.z = 2.5;
+        
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas: canvas, 
+            antialias: true, 
+            alpha: true 
+        });
+        renderer.setSize(180, 180);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // Globe geometry
+        const geometry = new THREE.SphereGeometry(1, 32, 32);
+        
+        // Globe material - dark with wireframe overlay
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x0a1414,
+            transparent: true,
+            opacity: 0.9
+        });
+        
+        const globe = new THREE.Mesh(geometry, material);
+        scene.add(globe);
+        
+        // Wireframe overlay
+        const wireframeMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00d4aa,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+        const wireframe = new THREE.Mesh(geometry, wireframeMaterial);
+        scene.add(wireframe);
+        
+        // Outer glow ring
+        const ringGeometry = new THREE.RingGeometry(1.02, 1.05, 64);
+        const ringMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00d4aa,
+            transparent: true,
+            opacity: 0.6,
+            side: THREE.DoubleSide
+        });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        scene.add(ring);
+        
+        // Latitude lines
+        const createLatitudeLine = (lat) => {
+            const radius = Math.cos(lat * Math.PI / 180);
+            const y = Math.sin(lat * Math.PI / 180);
+            const curve = new THREE.EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
+            const points = curve.getPoints(64);
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0x00d4aa, transparent: true, opacity: 0.2 });
+            const line = new THREE.Line(geometry, material);
+            line.rotation.x = Math.PI / 2;
+            line.position.y = y;
+            return line;
+        };
+        
+        [-60, -30, 0, 30, 60].forEach(lat => {
+            scene.add(createLatitudeLine(lat));
+        });
+        
+        // Longitude lines
+        const createLongitudeLine = (lon) => {
+            const curve = new THREE.EllipseCurve(0, 0, 1, 1, 0, Math.PI, false, 0);
+            const points = curve.getPoints(32);
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0x00d4aa, transparent: true, opacity: 0.15 });
+            const line = new THREE.Line(geometry, material);
+            line.rotation.y = lon * Math.PI / 180;
+            return line;
+        };
+        
+        [0, 30, 60, 90, 120, 150].forEach(lon => {
+            scene.add(createLongitudeLine(lon));
+            scene.add(createLongitudeLine(-lon));
+        });
+        
+        // Animation
+        const animate = () => {
+            requestAnimationFrame(animate);
+            globe.rotation.y += 0.002;
+            wireframe.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        };
+        animate();
+    </script>
 
     <!-- About Section -->
     <section id="about" class="about">
