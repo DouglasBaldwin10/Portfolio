@@ -365,20 +365,20 @@ body {
 /* Globe Animation - Three.js */
 .globe-container {
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
 }
 
 #globe-canvas {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
+    width: 200px !important;
+    height: 200px !important;
 }
 
 .location-marker {
     position: absolute;
-    bottom: 32%;
-    right: 22%;
+    top: 45%;
+    right: 15%;
     z-index: 10;
 }
 
