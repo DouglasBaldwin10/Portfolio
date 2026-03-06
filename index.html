@@ -86,9 +86,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Three.js Globe
+        // Three.js Globe with Earth texture
         const canvas = document.getElementById('globe-canvas');
-        const container = document.querySelector('.globe-container');
         
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
@@ -99,82 +98,52 @@
             antialias: true, 
             alpha: true 
         });
-        renderer.setSize(180, 180);
+        renderer.setSize(200, 200);
         renderer.setPixelRatio(window.devicePixelRatio);
         
         // Globe geometry
-        const geometry = new THREE.SphereGeometry(1, 32, 32);
+        const geometry = new THREE.SphereGeometry(1, 64, 64);
         
-        // Globe material - dark with wireframe overlay
+        // Load Earth texture
+        const textureLoader = new THREE.TextureLoader();
+        const earthTexture = textureLoader.load('https://unpkg.com/three-globe@2.24.13/example/img/earth-dark.jpg');
+        
+        // Globe material with Earth texture
         const material = new THREE.MeshBasicMaterial({
-            color: 0x0a1414,
-            transparent: true,
-            opacity: 0.9
+            map: earthTexture,
         });
         
         const globe = new THREE.Mesh(geometry, material);
+        // Rotate to show Africa/South Africa
+        globe.rotation.y = -0.5;
         scene.add(globe);
         
-        // Wireframe overlay
-        const wireframeMaterial = new THREE.MeshBasicMaterial({
+        // Atmosphere glow
+        const atmosphereGeometry = new THREE.SphereGeometry(1.02, 64, 64);
+        const atmosphereMaterial = new THREE.MeshBasicMaterial({
             color: 0x00d4aa,
-            wireframe: true,
             transparent: true,
-            opacity: 0.15
+            opacity: 0.1,
+            side: THREE.BackSide
         });
-        const wireframe = new THREE.Mesh(geometry, wireframeMaterial);
-        scene.add(wireframe);
+        const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+        scene.add(atmosphere);
         
         // Outer glow ring
-        const ringGeometry = new THREE.RingGeometry(1.02, 1.05, 64);
+        const ringGeometry = new THREE.RingGeometry(1.03, 1.06, 64);
         const ringMaterial = new THREE.MeshBasicMaterial({
             color: 0x00d4aa,
             transparent: true,
-            opacity: 0.6,
+            opacity: 0.3,
             side: THREE.DoubleSide
         });
         const ring = new THREE.Mesh(ringGeometry, ringMaterial);
         scene.add(ring);
         
-        // Latitude lines
-        const createLatitudeLine = (lat) => {
-            const radius = Math.cos(lat * Math.PI / 180);
-            const y = Math.sin(lat * Math.PI / 180);
-            const curve = new THREE.EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
-            const points = curve.getPoints(64);
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
-            const material = new THREE.LineBasicMaterial({ color: 0x00d4aa, transparent: true, opacity: 0.2 });
-            const line = new THREE.Line(geometry, material);
-            line.rotation.x = Math.PI / 2;
-            line.position.y = y;
-            return line;
-        };
-        
-        [-60, -30, 0, 30, 60].forEach(lat => {
-            scene.add(createLatitudeLine(lat));
-        });
-        
-        // Longitude lines
-        const createLongitudeLine = (lon) => {
-            const curve = new THREE.EllipseCurve(0, 0, 1, 1, 0, Math.PI, false, 0);
-            const points = curve.getPoints(32);
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
-            const material = new THREE.LineBasicMaterial({ color: 0x00d4aa, transparent: true, opacity: 0.15 });
-            const line = new THREE.Line(geometry, material);
-            line.rotation.y = lon * Math.PI / 180;
-            return line;
-        };
-        
-        [0, 30, 60, 90, 120, 150].forEach(lon => {
-            scene.add(createLongitudeLine(lon));
-            scene.add(createLongitudeLine(-lon));
-        });
-        
-        // Animation
+        // Animation - slow rotation
         const animate = () => {
             requestAnimationFrame(animate);
-            globe.rotation.y += 0.002;
-            wireframe.rotation.y += 0.002;
+            globe.rotation.y += 0.001;
             renderer.render(scene, camera);
         };
         animate();
