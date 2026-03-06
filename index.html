@@ -115,10 +115,10 @@
         const globe = new THREE.Mesh(geometry, material);
         scene.add(globe);
         
-        // Rotate globe to show Atlantic Ocean (Africa on right, Americas on left)
-        // This shows both South Africa and Canada
-        globe.rotation.y = 1.2;
-        globe.rotation.x = 0.2;
+        // Rotate globe to show Atlantic view - Americas on left, Africa on right
+        // Adjusted to properly align texture with coordinates
+        globe.rotation.y = -0.4;
+        globe.rotation.x = 0.15;
         
         // Atmosphere glow
         const atmosphereGeometry = new THREE.SphereGeometry(1.015, 64, 64);
@@ -147,7 +147,7 @@
         function createMarker(lat, lon) {
             const position = latLongToVector3(lat, lon, 1.02);
             
-            const markerGeometry = new THREE.SphereGeometry(0.03, 16, 16);
+            const markerGeometry = new THREE.SphereGeometry(0.035, 16, 16);
             const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x00d4aa });
             const marker = new THREE.Mesh(markerGeometry, markerMaterial);
             
@@ -156,8 +156,8 @@
             // Apply same rotation as globe
             const markerGroup = new THREE.Group();
             markerGroup.add(marker);
-            markerGroup.rotation.y = 1.2;
-            markerGroup.rotation.x = 0.2;
+            markerGroup.rotation.y = -0.4;
+            markerGroup.rotation.x = 0.15;
             
             return markerGroup;
         }
