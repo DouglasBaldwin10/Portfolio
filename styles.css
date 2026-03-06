@@ -752,6 +752,10 @@ section {
         padding: 100px 24px 40px;
     }
     
+    .hero-content {
+        text-align: center;
+    }
+    
     .hero-title {
         font-size: 2.5rem;
     }
@@ -760,16 +764,63 @@ section {
         font-size: 3rem;
     }
     
+    .flags {
+        justify-content: center;
+    }
+    
+    .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .hero-cta {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero-cta .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+    
+    .hero-right {
+        display: none;
+    }
+    
     section {
         padding: 80px 24px;
+    }
+    
+    .section-header {
+        justify-content: center;
     }
     
     .section-header h2 {
         font-size: 2rem;
     }
     
+    .about-content {
+        text-align: center;
+    }
+    
+    .about-text {
+        margin: 0 auto;
+    }
+    
     .skills-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+        padding: 0;
+    }
+    
+    .project-card {
+        margin: 0 auto;
+        max-width: 100%;
     }
     
     .profile-image-wrapper {
@@ -777,8 +828,8 @@ section {
         height: 200px;
     }
     
-    .globe-container {
-        width: 150px;
-        height: 150px;
+    .journey-graphic {
+        width: 120px;
+        height: 160px;
     }
 }
