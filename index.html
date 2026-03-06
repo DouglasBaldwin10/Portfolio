@@ -66,11 +66,17 @@
                         <img src="profile.jpg" alt="Douglas Baldwin" class="profile-image">
                         <div class="profile-ring"></div>
                     </div>
-                    <div class="globe-container">
-                        <canvas id="globe-canvas"></canvas>
-                        <div class="globe-labels">
-                            <span class="globe-label ottawa">Ottawa, CA</span>
-                            <span class="globe-label durban">Durban, SA</span>
+                    <div class="journey-graphic">
+                        <div class="journey-line"></div>
+                        <div class="journey-point origin">
+                            <div class="point-dot"></div>
+                            <span class="point-label">Durban, SA</span>
+                            <span class="point-year">2021</span>
+                        </div>
+                        <div class="journey-point destination">
+                            <div class="point-dot"></div>
+                            <span class="point-label">Ottawa, CA</span>
+                            <span class="point-year">Now</span>
                         </div>
                     </div>
                 </div>
@@ -83,97 +89,7 @@
         </div>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // Three.js Globe - Complete rewrite with proper coordinate mapping
-        const canvas = document.getElementById('globe-canvas');
-        
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-        camera.position.z = 2.8;
-        
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas: canvas, 
-            antialias: true, 
-            alpha: true 
-        });
-        renderer.setSize(220, 220);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        
-        // Create a group to hold everything - this lets us rotate the whole scene
-        const globeGroup = new THREE.Group();
-        scene.add(globeGroup);
-        
-        // Globe geometry
-        const geometry = new THREE.SphereGeometry(1, 64, 64);
-        
-        // Load Earth texture
-        const textureLoader = new THREE.TextureLoader();
-        const earthTexture = textureLoader.load('https://unpkg.com/three-globe@2.24.13/example/img/earth-dark.jpg');
-        
-        // Globe material
-        const material = new THREE.MeshBasicMaterial({
-            map: earthTexture,
-        });
-        
-        const globe = new THREE.Mesh(geometry, material);
-        globeGroup.add(globe);
-        
-        // Atmosphere glow
-        const atmosphereGeometry = new THREE.SphereGeometry(1.02, 64, 64);
-        const atmosphereMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00d4aa,
-            transparent: true,
-            opacity: 0.06,
-            side: THREE.BackSide
-        });
-        const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-        globeGroup.add(atmosphere);
-        
-        // Convert lat/lon to 3D coordinates on sphere
-        // Standard geographic coordinate conversion
-        function createMarkerAtLocation(lat, lon, radius) {
-            // Convert to radians
-            const latRad = lat * Math.PI / 180;
-            const lonRad = -lon * Math.PI / 180; // Negative because texture is flipped
-            
-            // Spherical to Cartesian
-            const x = radius * Math.cos(latRad) * Math.cos(lonRad);
-            const y = radius * Math.sin(latRad);
-            const z = radius * Math.cos(latRad) * Math.sin(lonRad);
-            
-            // Create glowing marker
-            const markerGeometry = new THREE.SphereGeometry(0.04, 16, 16);
-            const markerMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x00d4aa,
-            });
-            const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-            marker.position.set(x, y, z);
-            
-            return marker;
-        }
-        
-        // Add markers at exact coordinates
-        // Ottawa, Canada: 45.4215° N, 75.6972° W
-        const ottawaMarker = createMarkerAtLocation(45.4215, -75.6972, 1.01);
-        globeGroup.add(ottawaMarker);
-        
-        // Durban, South Africa: 29.8587° S, 31.0218° E
-        const durbanMarker = createMarkerAtLocation(-29.8587, 31.0218, 1.01);
-        globeGroup.add(durbanMarker);
-        
-        // Rotate the entire group to show Atlantic Ocean view
-        // This centers the view between North America and Africa
-        globeGroup.rotation.y = -0.5; // Rotate to show Atlantic
-        globeGroup.rotation.x = 0.2;  // Slight tilt
-        
-        // Render
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
-        animate();
-    </script>
+    
 
     <!-- About Section -->
     <section id="about" class="about">
