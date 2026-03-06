@@ -68,10 +68,9 @@
                     </div>
                     <div class="globe-container">
                         <canvas id="globe-canvas"></canvas>
-                        <div class="location-marker">
-                            <div class="marker-pin"></div>
-                            <div class="marker-pulse"></div>
-                            <span class="marker-label">Durban, SA</span>
+                        <div class="globe-labels">
+                            <span class="globe-label ottawa">Ottawa, CA</span>
+                            <span class="globe-label durban">Durban, SA</span>
                         </div>
                     </div>
                 </div>
@@ -86,19 +85,19 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Three.js Globe with Earth texture
+        // Three.js Globe with Earth texture - Static with location markers
         const canvas = document.getElementById('globe-canvas');
         
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-        camera.position.z = 2.5;
+        camera.position.z = 2.8;
         
         const renderer = new THREE.WebGLRenderer({ 
             canvas: canvas, 
             antialias: true, 
             alpha: true 
         });
-        renderer.setSize(200, 200);
+        renderer.setSize(220, 220);
         renderer.setPixelRatio(window.devicePixelRatio);
         
         // Globe geometry
@@ -114,38 +113,76 @@
         });
         
         const globe = new THREE.Mesh(geometry, material);
-        // Rotate to show Africa/South Africa
-        globe.rotation.y = -0.5;
         scene.add(globe);
         
+        // Rotate globe to show Atlantic Ocean (Africa on right, Americas on left)
+        // This shows both South Africa and Canada
+        globe.rotation.y = 1.2;
+        globe.rotation.x = 0.2;
+        
         // Atmosphere glow
-        const atmosphereGeometry = new THREE.SphereGeometry(1.02, 64, 64);
+        const atmosphereGeometry = new THREE.SphereGeometry(1.015, 64, 64);
         const atmosphereMaterial = new THREE.MeshBasicMaterial({
             color: 0x00d4aa,
             transparent: true,
-            opacity: 0.1,
+            opacity: 0.08,
             side: THREE.BackSide
         });
         const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
         scene.add(atmosphere);
         
-        // Outer glow ring
-        const ringGeometry = new THREE.RingGeometry(1.03, 1.06, 64);
-        const ringMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00d4aa,
-            transparent: true,
-            opacity: 0.3,
-            side: THREE.DoubleSide
-        });
-        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-        scene.add(ring);
+        // Function to convert lat/long to 3D position
+        function latLongToVector3(lat, lon, radius) {
+            const phi = (90 - lat) * (Math.PI / 180);
+            const theta = (lon + 180) * (Math.PI / 180);
+            
+            const x = -(radius * Math.sin(phi) * Math.cos(theta));
+            const y = radius * Math.cos(phi);
+            const z = radius * Math.sin(phi) * Math.sin(theta);
+            
+            return new THREE.Vector3(x, y, z);
+        }
         
-        // Animation - slow rotation
-        const animate = () => {
-            requestAnimationFrame(animate);
-            globe.rotation.y += 0.001;
+        // Create marker function
+        function createMarker(lat, lon) {
+            const position = latLongToVector3(lat, lon, 1.02);
+            
+            const markerGeometry = new THREE.SphereGeometry(0.03, 16, 16);
+            const markerMaterial = new THREE.MeshBasicMaterial({ color: 0x00d4aa });
+            const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+            
+            marker.position.copy(position);
+            
+            // Apply same rotation as globe
+            const markerGroup = new THREE.Group();
+            markerGroup.add(marker);
+            markerGroup.rotation.y = 1.2;
+            markerGroup.rotation.x = 0.2;
+            
+            return markerGroup;
+        }
+        
+        // Durban, South Africa: -29.8587, 31.0218
+        const durbanMarker = createMarker(-29.8587, 31.0218);
+        scene.add(durbanMarker);
+        
+        // Ottawa, Canada: 45.4215, -75.6972
+        const ottawaMarker = createMarker(45.4215, -75.6972);
+        scene.add(ottawaMarker);
+        
+        // Static render (no animation needed)
+        function render() {
             renderer.render(scene, camera);
-        };
+        }
+        
+        // Wait for texture to load then render
+        earthTexture.onUpdate = render;
+        
+        // Render loop for smooth display
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
         animate();
     </script>
 
