@@ -1,1 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Douglas Baldwin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">DB</a>
+        <div class="nav-links">
+            <a href="index.html#about">About</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="index.html#contact" class="nav-cta">Get in Touch</a>
+        </div>
+    </nav>
 
+    <!-- Projects Header -->
+    <section class="projects-page-header">
+        <a href="index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Home
+        </a>
+        <h1>Investment & Analytics Projects</h1>
+        <p>A collection of financial modeling, valuation, and analytical work from academic and personal projects.</p>
+    </section>
+
+    <!-- Projects List -->
+    <section class="projects-list">
+        <div class="project-detail-card">
+            <div class="project-detail-header">
+                <div class="project-detail-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="20" x2="12" y2="10"></line>
+                        <line x1="18" y1="20" x2="18" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="16"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h2>Equity Valuation & M&A Analysis</h2>
+                    <span class="project-tag">Academic Capstone - 2025</span>
+                </div>
+            </div>
+            <div class="project-detail-content">
+                <p>Comprehensive equity valuation and M&A analysis project completed as part of my finance capstone course at the University of Ottawa.</p>
+                
+                <h3>Key Deliverables</h3>
+                <ul>
+                    <li>Built DCF models with multi-year cash flow forecasting and WACC estimation</li>
+                    <li>Conducted sensitivity and scenario analysis on key value drivers</li>
+                    <li>Developed M&A investment thesis recommending acquisition target</li>
+                    <li>Analyzed deal economics, synergies, and strategic fit</li>
+                </ul>
+                
+                <h3>Tools & Methods</h3>
+                <div class="tools-grid">
+                    <span class="tool-tag">Microsoft Excel</span>
+                    <span class="tool-tag">S&P Capital IQ</span>
+                    <span class="tool-tag">DCF Valuation</span>
+                    <span class="tool-tag">Comparable Analysis</span>
+                    <span class="tool-tag">Sensitivity Analysis</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Douglas Baldwin. Built with purpose.</p>
+    </footer>
+
+    <style>
+        /* Additional styles for projects page */
+        .projects-page-header {
+            padding-top: 140px;
+            padding-bottom: 60px;
+            text-align: center;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+            transition: color var(--transition-fast);
+        }
+        
+        .back-link:hover {
+            color: var(--accent-primary);
+        }
+        
+        .projects-page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .projects-page-header p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .projects-list {
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        
+        .project-detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .project-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .project-detail-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-glow);
+            border-radius: 16px;
+            color: var(--accent-primary);
+        }
+        
+        .project-detail-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        
+        .project-tag {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+        }
+        
+        .project-detail-content {
+            padding: 32px;
+        }
+        
+        .project-detail-content p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        
+        .project-detail-content h3 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .project-detail-content ul {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+        
+        .project-detail-content li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .project-detail-content li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+        
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tool-tag {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .projects-page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .project-detail-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</body>
+</html>
